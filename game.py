@@ -1,4 +1,5 @@
 import pygame
+import engine
 # constant variables
 
 SCREEN_HEIGHT = 600
@@ -45,7 +46,18 @@ pygame.mixer.music.play(-1)
 coin_sound = pygame.mixer.Sound('songs/coin.ogg')
 
 # coins
+coin_image_list = [
+    pygame.image.load('images/coin_0.png'),
+    pygame.image.load('images/coin_1.png'),
+    pygame.image.load('images/coin_2.png'),
+    pygame.image.load('images/coin_3.png'),
+    pygame.image.load('images/coin_4.png'),
+    pygame.image.load('images/coin_5.png'),
+    pygame.image.load('images/coin_6.png')]
+
 coin_image = pygame.image.load('images/coin_0.png')
+coin_animation = engine.Animation(coin_image_list)
+
 coins = [
             pygame.Rect(1300, 450, 32, 32),
             pygame.Rect(1200, 400, 32, 32),
@@ -156,10 +168,10 @@ while running:
         pygame.draw.rect(screen, BLACK, p)
 
     # coins
+    coin_animation.update()
     for c in coins:
         c[0] -= coin_speed
-        # screen.blit(coin_image, (c[0], c[1]))
-        screen.blit(coin_image, (c[0], c[1]))
+        coin_animation.draw(screen, c[0], c[1])
 
     screen.blit(player_image, (player_x_position, player_y_position))
 
