@@ -1,13 +1,13 @@
 import pygame
-import engine
+import coin
+import random
+import math
 # constant variables
 
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 900
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
-CHARACTER_HEIGHT = 72
-CHARACTER_WIDTH = 58
 
 PLATFORM_HEIGHT = 50
 
@@ -24,12 +24,19 @@ pygame.display.set_caption('De volta para o lar')
 clock = pygame.time.Clock()
 font = pygame.font.Font(pygame.font.get_default_font(), 24)
 
+gravity = 0.4
+impulse = -0.5
 
 #player
 player_image = pygame.image.load('images/soldier.png')
+
+player_height = 72
+player_width = 58
+
 player_x_position = 40
 player_y_position = 10
 
+player_x_speed = 0
 player_y_speed = 0
 player_y_acelleration = 0.4
 
@@ -56,56 +63,26 @@ coin_image_list = [
     pygame.image.load('images/coin_6.png')]
 
 coin_image = pygame.image.load('images/coin_0.png')
-coin_animation = engine.Animation(coin_image_list)
 
-coins = [
-            pygame.Rect(1300, 450, 32, 32),
-            pygame.Rect(1200, 400, 32, 32),
-            pygame.Rect(1100, 350, 32, 32),
-            pygame.Rect(1000, 300, 32, 32),
-            pygame.Rect(900, 250, 32, 32),
-
-            pygame.Rect(2000, 250, 32, 32),
-            pygame.Rect(2200, 250, 32, 32),
-            pygame.Rect(2400, 250, 32, 32),
-            pygame.Rect(2600, 250, 32, 32),
-            pygame.Rect(2800, 250, 32, 32),
-
-            pygame.Rect(4000, 200, 32, 32),
-            pygame.Rect(4200, 250, 32, 32),
-            pygame.Rect(3800, 250, 32, 32),
-            pygame.Rect(4200, 350, 32, 32),
-            pygame.Rect(3800, 350, 32, 32),
-            pygame.Rect(4300, 300, 32, 32),
-            pygame.Rect(3700, 300, 32, 32),
-            pygame.Rect(4000, 400, 32, 32),
-
-            pygame.Rect(5000, 450, 32, 32),
-            pygame.Rect(5200, 400, 32, 32),
-            pygame.Rect(5400, 350, 32, 32),
-            pygame.Rect(5600, 300, 32, 32),
-            pygame.Rect(5800, 250, 32, 32),
-
-            pygame.Rect(7000, 450, 32, 32),
-            pygame.Rect(5200, 400, 32, 32),
-            pygame.Rect(5400, 350, 32, 32),
-            pygame.Rect(5600, 300, 32, 32),
-            pygame.Rect(5800, 250, 32, 32),
-            
-            pygame.Rect(8000, 200, 32, 32),
-            pygame.Rect(8050, 200, 32, 32),
-            pygame.Rect(8100, 200, 32, 32),
-            pygame.Rect(8150, 200, 32, 32),
-            pygame.Rect(8200, 200, 32, 32),
-            pygame.Rect(8250, 200, 32, 32),
-            pygame.Rect(8300, 200, 32, 32),
-            pygame.Rect(8350, 200, 32, 32),
-            pygame.Rect(8400, 200, 32, 32),
-            pygame.Rect(8450, 200, 32, 32)
-        ]
-
+coins = []
 coin_speed = 5
 coins_collected = 0
+steps_walked = [0]
+jetpackCoins = coin.Coin(coin_image_list, coin_speed, coins, SCREEN_SIZE, PLATFORM_HEIGHT)
+coin_structure = {1: 'Row', 
+                  2:'Ascending ramp', 
+                  3:'Descending ramp', 
+                  4:'Circle Sequence', 
+                  5:'Heart', 
+                  6:'Rectangle', 
+                  7:'LittleSquare Sequence', 
+                  8:'Yano Eu Te Amo', 
+                  9:'Carla Meu Amor',
+                  10:'Arrow',
+                  11:'Double Row',
+                  12:'Triple Row',
+                  13: 'X'
+}
 
 running = True
 while running:
@@ -122,22 +99,19 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_SPACE]:
         space_pressed = True
-        if player_y_speed > 0:
-            player_y_acelleration = -0.3
-        else:
-            player_y_acelleration = -0.2
+        player_y_acelleration = impulse
         if platforms[0].colliderect(new_player_rect):
             player_y_speed = -5
     else:
         space_pressed = False
-        player_y_acelleration = 0.4
+        player_y_acelleration = gravity
 
     # vertical movement
     # the new position has changed
     player_y_speed += player_y_acelleration
     player_new_y_position = player_y_position + player_y_speed
     # the future position prevision
-    new_player_rect = pygame.Rect(player_x_position, player_new_y_position, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+    new_player_rect = pygame.Rect(player_x_position, player_new_y_position, player_width, player_height)
     y_collision = False
     for p in platforms:
         if p.colliderect(new_player_rect):
@@ -149,7 +123,7 @@ while running:
         player_y_position = player_new_y_position
 
     # see if any coins have been collected
-    player_rect = pygame.Rect(player_x_position, player_y_position, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+    player_rect = pygame.Rect(player_x_position, player_y_position, player_width, player_height)
     for c in coins: 
         if c.colliderect(player_rect):
             coins.remove(c)
@@ -166,12 +140,46 @@ while running:
     #platforms
     for p in platforms:
         pygame.draw.rect(screen, BLACK, p)
+    
+    jetpackCoins.createCoinChain(steps_walked)
+    # steps_walked += coin_speed
+    # if(steps_walked > SCREEN_WIDTH):
+    #     steps_walked = 0
+    #     coin_structure_type = random.randint(1, 5)
+    #     if(coin_structure_type == 1):
+    #         coin_height = random.randint(10, SCREEN_HEIGHT - PLATFORM_HEIGHT - 80)
+    #         coin_amount = random.randint(5, 12)
+    #         for i in range (1, coin_amount):
+    #             coins.append(pygame.Rect(SCREEN_WIDTH + 50*i, coin_height, 32, 32))
+    #     elif(coin_structure_type == 2):
+    #         coin_height = random.randint(10 + 12*20, SCREEN_HEIGHT - PLATFORM_HEIGHT -80)
+    #         coin_amount = random.randint(5, 12)
+    #         for i in range (1, coin_amount):
+    #             coins.append(pygame.Rect(SCREEN_WIDTH + 50*i, coin_height - 20*i, 32, 32))
+    #     elif(coin_structure_type == 3):
+    #         coin_height = random.randint(10, SCREEN_HEIGHT - PLATFORM_HEIGHT - 12*20 - 50)
+    #         coin_amount = random.randint(5, 12)
+    #         for i in range (1, coin_amount):
+    #             coins.append(pygame.Rect(SCREEN_WIDTH + 50*i, coin_height + 20*i, 32, 32))
+    #     elif(coin_structure_type == 4):
+    #         coin_height = random.randint(100, SCREEN_HEIGHT - PLATFORM_HEIGHT - 100 - 50)
+    #         for i in range (1, 12):
+    #             coins.append(pygame.Rect(SCREEN_WIDTH + 200 + round(100*math.cos(i*45*math.pi/180)), coin_height + round(100*math.sin(i*45*math.pi/180)), 32, 32))
+    #     elif(coin_structure_type == 5):
+    #         coin_height = random.randint(100, SCREEN_HEIGHT - PLATFORM_HEIGHT - 50)
+    #         coin_amount = random.randint(5, 12)
+    #         for i in range (1, coin_amount):
+    #             if(i % 2 == 1):
+    #                 delta_height = 100
+    #             else:
+    #                 delta_height = -100
+    #             coins.append(pygame.Rect(SCREEN_WIDTH + 50*i, coin_height + delta_height, 32, 32))
 
     # coins
-    coin_animation.update()
+    jetpackCoins.update()
     for c in coins:
         c[0] -= coin_speed
-        coin_animation.draw(screen, c[0], c[1])
+        jetpackCoins.draw(screen, c[0], c[1])
 
     screen.blit(player_image, (player_x_position, player_y_position))
 
