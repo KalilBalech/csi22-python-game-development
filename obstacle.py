@@ -3,7 +3,7 @@ import random
 import math
 import entity
 
-class Coin(entity.Entity):
+class Obstacle(entity.Entity):
     def __init__(self, screenDimensions, platforms, screen):
         self.imageList =   [pygame.image.load('images/coin_0.png'),
                             pygame.image.load('images/coin_1.png'),
