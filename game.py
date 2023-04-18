@@ -3,30 +3,13 @@ import prop
 import soldier
 import coin
 import obstacle
-# constant variables
-
-SCREEN_HEIGHT = 600
-SCREEN_WIDTH = 900
-SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
-
-
-PLATFORM_HEIGHT = 50
-
-WHITE = (255, 255, 255)
-DARK_GREY = (50,50,50)
-MUSTARD = (209,206,25)
-LIGHT_BLUE = (15, 235, 255)
-BLACK = (0, 0, 0)
 
 # init
 pygame.init()
-screen = pygame.display.set_mode(SCREEN_SIZE)
-pygame.display.set_caption('De volta para o lar')
-clock = pygame.time.Clock()
-font = pygame.font.Font(pygame.font.get_default_font(), 24)
 
 # game general properties
-basics = prop.Prop(SCREEN_SIZE, screen)
+basics = prop.Prop()
+basics.initialConfig()
 
 #player
 player_dimensions = (58, 72)
@@ -45,32 +28,13 @@ player_acelleration = [0, 0.4]
 player_x_acelleration = player_acelleration[0]
 player_y_acelleration = player_acelleration[1]
 
-capitaoJoao = soldier.Soldier(player_dimensions, SCREEN_SIZE, screen)
-
-
-# background song
-music = pygame.mixer.music.load('songs/galinha.ogg')
-pygame.mixer.music.play(-1)
+capitaoJoao = soldier.Soldier(player_dimensions)
 
 # coins
-steps_walked = [0]
-jetpackCoins = coin.Coin(SCREEN_SIZE, screen)
-# coin_structure = {1: 'Row', 
-#                   2:'Ascending ramp', 
-#                   3:'Descending ramp', 
-#                   4:'Circle Sequence', 
-#                   5:'Heart', 
-#                   6:'Rectangle', 
-#                   7:'LittleSquare Sequence', 
-#                   8:'Yano Eu Te Amo', 
-#                   9:'Carla Meu Amor',
-#                   10:'Arrow',
-#                   11:'Double Row',
-#                   12:'Triple Row',
-#                   13: 'X'
-# }
+jetpackCoins = coin.Coin()
+
 # obstacle
-jetpackRockets = obstacle.Obstacle(SCREEN_SIZE, screen)
+jetpackRockets = obstacle.Obstacle()
 running = True
 while running:
 # game loop
@@ -95,12 +59,10 @@ while running:
     # draw
 
     #background
-    screen.fill(LIGHT_BLUE)
+    basics.fillBackground()
 
-    #platforms
-    # for p in platforms:
-    #     pygame.draw.rect(screen, BLACK, p)
-    basics.platformsInit()
+    # platform display
+    basics.platformsDisplay()
     
     # coins
     # make coin chains appear AND UPDATE STEP WALKED
@@ -108,25 +70,22 @@ while running:
     # make coin images update after 8 times this function run
     jetpackCoins.update()
     # make the coins move and make the coins appear in the screen
-    jetpackCoins.draw(screen)
+    jetpackCoins.draw() 
 
-    # obstacles
+    # obstacles  
     jetpackRockets.createRocket()
-    jetpackRockets.draw(screen)
+    jetpackRockets.draw()
 
-    screen.blit(capitaoJoao.image, (player_position[0], player_position[1]))
+    basics.soldierDisplay(capitaoJoao.image, (player_position[0], player_position[1]))
+    # screen.blit(capitaoJoao.image, (player_position[0], player_position[1]))
 
     # Player information display
 
     # user interface
-    screen.blit(jetpackCoins.singleImage, (20, 20))
-    coin_text = font.render(str(jetpackCoins.coinsCollected), True, BLACK, LIGHT_BLUE)
-    coin_text_rectangle = coin_text.get_rect()
-    coin_text_rectangle.topleft = (55, 25)
-    screen.blit(coin_text, coin_text_rectangle)
+    basics.userInterfaceDisplay(jetpackCoins.singleImage, jetpackCoins.coinsCollected[0])
     
-    pygame.display.flip()
-    clock.tick(60)
+    # final config
+    basics.finalCongig()
 
 # quit
 pygame.quit()

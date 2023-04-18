@@ -3,14 +3,14 @@ import random
 import prop
 
 class Obstacle(prop.Prop):
-    def __init__(self, screenDimensions, screen):
+    def __init__(self):
         self.singleImage = pygame.image.load('images/coin_0.png') # alterar imagem
         self.rocketSpeed = 15
         self.rockets = []
         self.soundComing = pygame.mixer.Sound('songs/coin.ogg') # alterar som enquanto o foguete tá na tela
         self.soundHitted = pygame.mixer.Sound('songs/coin.ogg') # alterar som enquanto o foguete tá na tela
         self.rocketSteps = [0]
-        super().__init__(screenDimensions, screen)
+        super().__init__()
     
     # def update(self):
     #     self.animationTimer += 1
@@ -19,10 +19,10 @@ class Obstacle(prop.Prop):
     #         self.imageIndex += 1
     #         if self.imageIndex > len(self.imageList) - 1:
     #             self.imageIndex = 0
-    def draw(self, screen):
+    def draw(self):
         for r in self.rockets:
             r[0] -= self.rocketSpeed
-            screen.blit(self.singleImage, (r[0], r[1]))
+            self.screen.blit(self.singleImage, (r[0], r[1]))
 
     def verifyCollision(self, playerRect):
         for r in self.rockets: 

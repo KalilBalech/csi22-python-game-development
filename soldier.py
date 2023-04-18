@@ -2,12 +2,12 @@ import pygame
 import prop
 
 class Soldier(prop.Prop):
-    def __init__(self, dimensions, screenDimensions, screen):
+    def __init__(self, dimensions):
         self.image = pygame.image.load('images/soldier.png')
         self.gravity = 0.4
         self.impulse = -0.5
         self.dimensions = dimensions
-        super().__init__(screenDimensions, screen)
+        super().__init__()
     
     def movement(self, position, speed, acelleration):
         # player input
