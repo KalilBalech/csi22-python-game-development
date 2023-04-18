@@ -33,8 +33,11 @@ class Coin(prop.Prop):
     def draw(self):
         image = self.imageList[self.imageIndex]
         for c in self.coins:
-            c[0] -= self.coinSpeed
-            self.screen.blit(image, (c[0], c[1]))
+            if(c[0] < 0):
+                self.coins.remove(c)
+            else:
+                c[0] -= self.coinSpeed
+                self.screen.blit(image, (c[0], c[1]))
 
     def verifyCollection(self, playerRect):
         for c in self.coins: 
@@ -96,6 +99,7 @@ class Coin(prop.Prop):
                     self.coins.append(pygame.Rect(self.screen_width + horizontalCoinDistance*i, coin_height + 20, 32, 32))
                     self.coins.append(pygame.Rect(self.screen_width + horizontalCoinDistance*i, coin_height + 40, 32, 32))
                     self.coins.append(pygame.Rect(self.screen_width + horizontalCoinDistance*i, coin_height + 60, 32, 32))
+                    self.coins.append(pygame.Rect(self.screen_width + horizontalCoinDistance*i, coin_height + 80, 32, 32))
 # coin_structure = {1: 'Row', 
 #                   2:'Ascending ramp', 
 #                   3:'Descending ramp', 
