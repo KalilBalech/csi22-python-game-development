@@ -1,8 +1,8 @@
 import pygame
-import coin
+import prop
 import soldier
-import random
-import math
+import coin
+import obstacle
 # constant variables
 
 SCREEN_HEIGHT = 600
@@ -25,17 +25,10 @@ pygame.display.set_caption('De volta para o lar')
 clock = pygame.time.Clock()
 font = pygame.font.Font(pygame.font.get_default_font(), 24)
 
-gravity = 0.4
-impulse = -0.5
-
-#platforms
-#ground
-platforms = [pygame.Rect(0, SCREEN_HEIGHT-PLATFORM_HEIGHT, SCREEN_WIDTH, PLATFORM_HEIGHT),
-             pygame.Rect(0, 0, SCREEN_WIDTH, 1)]
+# game general properties
+basics = prop.Prop(SCREEN_SIZE, screen)
 
 #player
-player_image = pygame.image.load('images/soldier.png')
-
 player_dimensions = (58, 72)
 player_width = player_dimensions[0]
 player_height = player_dimensions[1]
@@ -52,7 +45,7 @@ player_acelleration = [0, 0.4]
 player_x_acelleration = player_acelleration[0]
 player_y_acelleration = player_acelleration[1]
 
-capitaoJoao = soldier.Soldier(player_image, gravity, impulse, player_dimensions, platforms, SCREEN_SIZE, screen)
+capitaoJoao = soldier.Soldier(player_dimensions, SCREEN_SIZE, screen)
 
 
 # background song
@@ -61,7 +54,7 @@ pygame.mixer.music.play(-1)
 
 # coins
 steps_walked = [0]
-jetpackCoins = coin.Coin(SCREEN_SIZE, platforms, screen)
+jetpackCoins = coin.Coin(SCREEN_SIZE, screen)
 # coin_structure = {1: 'Row', 
 #                   2:'Ascending ramp', 
 #                   3:'Descending ramp', 
@@ -76,7 +69,8 @@ jetpackCoins = coin.Coin(SCREEN_SIZE, platforms, screen)
 #                   12:'Triple Row',
 #                   13: 'X'
 # }
-
+# obstacle
+jetpackRockets = obstacle.Obstacle(SCREEN_SIZE, screen)
 running = True
 while running:
 # game loop
@@ -91,9 +85,10 @@ while running:
     # player position based on input
     capitaoJoao.movement(player_position, player_speed, player_acelleration)
 
-    # see if any coins have been collected
+    # see if any coins have been collected or obstacles have been hitted
     playerRect = pygame.Rect(player_position[0], player_position[1], player_width, player_height)
     jetpackCoins.verifyCollection(playerRect)
+    jetpackRockets.verifyCollision(playerRect)
 
     # update
 
@@ -103,18 +98,23 @@ while running:
     screen.fill(LIGHT_BLUE)
 
     #platforms
-    for p in platforms:
-        pygame.draw.rect(screen, BLACK, p)
+    # for p in platforms:
+    #     pygame.draw.rect(screen, BLACK, p)
+    basics.platformsInit()
     
     # coins
-    # make coin chains appear
-    jetpackCoins.createCoinChain(steps_walked) 
+    # make coin chains appear AND UPDATE STEP WALKED
+    jetpackCoins.createCoinChain() 
     # make coin images update after 8 times this function run
     jetpackCoins.update()
     # make the coins move and make the coins appear in the screen
     jetpackCoins.draw(screen)
 
-    screen.blit(player_image, (player_position[0], player_position[1]))
+    # obstacles
+    jetpackRockets.createRocket()
+    jetpackRockets.draw(screen)
+
+    screen.blit(capitaoJoao.image, (player_position[0], player_position[1]))
 
     # Player information display
 
