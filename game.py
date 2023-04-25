@@ -14,10 +14,10 @@ basics.initialConfig()
 capitaoJoao = soldier.Soldier()
 
 # coins
-jetpackCoins = coin.Coin()
+jetpackCoins = coin.Coin(basics, capitaoJoao)
 
 # obstacle 
-jetpackRockets = obstacle.Obstacle()
+jetpackRockets = obstacle.Obstacle(basics, capitaoJoao)
 running = True
 while running:
 # game loop
@@ -28,13 +28,12 @@ while running:
             running = False
 
     # player position based on input
-    if jetpackRockets.state == 'playing':
+    if basics.state == 'playing':
         capitaoJoao.movement()
 
         # see if any coins have been collected or obstacles have been hitted
-        playerRect = pygame.Rect(capitaoJoao.position[0], capitaoJoao.position[1], capitaoJoao.dimensions[0], capitaoJoao.dimensions[1])
-        jetpackCoins.verifyCollection(playerRect)
-        jetpackRockets.verifyCollision(playerRect)
+        jetpackCoins.verifyCollection()
+        jetpackRockets.verifyCollision()
 
         # update
 
