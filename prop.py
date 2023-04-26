@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Prop:
     def __init__(self):
@@ -13,7 +14,11 @@ class Prop:
              pygame.Rect(0, 0, self.screen_width, 1)]
         self.state = 'playing'
         self.runDistance = [0]
-        self.endSound = pygame.mixer.Sound('songs/ketchup.ogg')
+        self.endSound = pygame.mixer.Sound('songs/endGame.ogg')
+        self.background = pygame.image.load('images/background.jpg')
+        self.tiles = math.ceil(self.screen_width/self.background.get_width()) + 1
+        self.scroll = [0]
+        self.backgroundSpeed = 5
     
     def initialConfig(self):
         music = pygame.mixer.music.load('songs/galinha.ogg')
@@ -21,9 +26,10 @@ class Prop:
         pygame.display.set_caption('De volta para o lar')
     
     def platformsDisplay(self):
-        BLACK = (0, 0, 0)
-        for p in self.platforms:
-            pygame.draw.rect(self.screen, BLACK, p)
+        pass
+        # BLACK = (0, 0, 0)
+        # for p in self.platforms:
+        #     pygame.draw.rect(self.screen, BLACK, p)
     
     def soldierDisplay(self, soldierImage, soldierPosition):
         self.screen.blit(soldierImage, soldierPosition)
@@ -35,8 +41,15 @@ class Prop:
         self.state = newState
 
     def fillBackground(self):
-        LIGHT_BLUE = (15, 235, 255)
-        self.screen.fill(LIGHT_BLUE)
+        for i in range (0, self.tiles):
+            self.screen.blit(self.background, (i*self.background.get_width() + self.scroll[0], 0))
+        
+        self.scroll[0] -= 5
+
+        if abs(self.scroll[0]) > self.background.get_width():
+            self.scroll[0] = 0
+        # LIGHT_BLUE = (15, 235, 255)
+        # self.screen.fill(LIGHT_BLUE)
     
     def userInterfaceDisplay(self, coinsCollected):
         LIGHT_BLUE = (15, 235, 255)
@@ -60,7 +73,6 @@ class Prop:
     
     def loseInterface(self, coinAmout, distance):
         BLACK = (0, 0, 0)
-        LIGHT_BLUE = (15, 235, 255)
         WHITE = (255, 255, 255)
         # Carregue a imagem
         image = pygame.image.load('images/time.jpg')
@@ -96,10 +108,6 @@ class Prop:
         end_text_rectangle.topleft = (200, 200)
         self.screen.blit(end_text, end_text_rectangle)
 
-        pygame.mixer.stop()
-
-        music = self.endSound
-        pygame.mixer.music.play(-1)
         # Atualize a tela
         pygame.display.update()
     
