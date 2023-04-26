@@ -1,44 +1,56 @@
 import pygame
 import prop
 
-class Soldier(prop.Prop):
-    def __init__(self):
+class Soldier():
+    def __init__(self, game):
         self.image = pygame.image.load('images/soldier.png')
-        self.gravity = 0.4
-        self.impulse = -0.5
-        self.dimensions = (58, 72)
-        self.position = [200, 10]
-        self.speed = [0, 0]
-        self.acceleration = [0, 0.4]
+        self.__gravity = 0.4
+        self.__impulse = -0.5
+        self.__dimensions = (58, 72)
+        self.__position = [200, 10]
+        self.__speed = [0, 0]
+        self.__acceleration = [0, 0.4]
+        self.__game = game
         super().__init__()
     
     def movement(self):
         # player input
-        current_player_rect = pygame.Rect(self.position[0], self.position[1], self.dimensions[0], self.dimensions[1])
+        current_player_rect = pygame.Rect(self.__position[0], self.__position[1], self.__dimensions[0], self.__dimensions[1])
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            self.acceleration[1] = self.impulse
-            if self.platforms[0].colliderect(current_player_rect):
-                self.speed[1] = -5
+            self.__acceleration[1] = self.__impulse
+            if self.__game.platforms()[0].colliderect(current_player_rect):
+                self.__speed[1] = -5
         else:
-            self.acceleration[1] = self.gravity
+            self.__acceleration[1] = self.__gravity
 
         # vertical movement
         # the new position has changed
-        self.speed[1] += self.acceleration[1]
-        player_new_y_position = self.position[1] + self.speed[1]
+        self.__speed[1] += self.__acceleration[1]
+        player_new_y_position = self.__position[1] + self.__speed[1]
         # the future position prevision
-        new_player_rect = pygame.Rect(self.position[0], player_new_y_position, self.dimensions[0], self.dimensions[1])
+        new_player_rect = pygame.Rect(self.__position[0], player_new_y_position, self.__dimensions[0], self.__dimensions[1])
         y_collision = False
-        for p in self.platforms:
+        for p in self.__game.platforms():
             if p.colliderect(new_player_rect):
                 y_collision = True
-                self.speed[1] = 0
+                self.__speed[1] = 0
 
         # if doesnt collide, so turns to the current position
         if y_collision == False:
-            self.position[1] = player_new_y_position
+            self.__position[1] = player_new_y_position
         
-        # self.screen.blit(self.image, (position[0], position[1]))
+        # self.__screen.blit(self.__image, (position[0], position[1]))
 
-        
+    def xPosition(self):
+        return self.__position[0]
+    
+    def yPosition(self):
+        return self.__position[1]
+    
+    def xDimensions(self):
+        return self.__dimensions[0]
+    
+    def yDimensions(self):
+        return self.__dimensions[1]
+    

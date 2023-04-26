@@ -15,7 +15,7 @@ pygame.init()
 basics = prop.Prop() 
 basics.initialConfig()
 
-capitaoJoao = soldier.Soldier()
+capitaoJoao = soldier.Soldier(basics)
 
 # coins
 jetpackCoins = coin.Coin(basics, capitaoJoao)
@@ -33,7 +33,7 @@ while running:
 
     # check for quit
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT:   
             running = False
 
     # player position based on input
@@ -83,16 +83,15 @@ while running:
         spikeBarHorizontal.draw()
 
         basics.updateDistance()
-
-        basics.soldierDisplay(capitaoJoao.image, (capitaoJoao.position[0], capitaoJoao.position[1]))
+        basics.soldierDisplay(capitaoJoao.image, (capitaoJoao.xPosition(), capitaoJoao.yPosition()))
 
         # Player information display
 
         # user interface
-        basics.userInterfaceDisplay(jetpackCoins.coinsCollected[0])
+        basics.userInterfaceDisplay(jetpackCoins.coinsCollected())
     
     else:
-        basics.loseInterface(jetpackCoins.coinsCollected[0], basics.runDistance[0])
+        basics.loseInterface(jetpackCoins.coinsCollected(), basics.runDistance())
 
     # final config
     basics.finalConfig()

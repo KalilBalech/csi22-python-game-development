@@ -10,13 +10,31 @@ class DynamicObstacle(obstacle.Obstacle):
         self.angleSpeed = 4
         self.angle = [0]
         self.obstacleSpeed = 5
+        self.imageIndex = 0
+        self.animationTimer = 0
+        self.animationSpeed = 8
 
         # particular
         #self.singleImage = pygame.image.load('images/spike-ball.png')
         #self.obstacleDimensions = (32, 32)
+    def update(self):
+        self.animationTimer += 1
+        if self.animationTimer >= self.animationSpeed:
+            self.animationTimer = 0
+            self.imageIndex += 1
+            if self.imageIndex > len(self.imageList) - 1:
+                self.imageIndex = 0
 
     def draw(self):
-        super().draw()
+        image = self.imageList[self.imageIndex]
+        for r in self.obstacles:
+            if(r[0] < -50):
+                self.obstacles.remove(r)
+            else:
+                r[0] -= self.obstacleSpeed
+                self.angle[0] += self.angleSpeed
+                rotated_image = pygame.transform.rotate(image, self.angle[0])
+                self.game.screen().blit(rotated_image, (r[0], r[1]))
 
     def verifyCollision(self):
         return super().verifyCollision()

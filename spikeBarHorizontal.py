@@ -8,6 +8,7 @@ class SpikeBarHorizontal(staticObstacle.StaticObstacle):
         self.obstacleSpeed = 8
 
         self.singleImage = pygame.image.load('images/staticBar-90.png')
+        self.imageList = [pygame.image.load('images/staticBar-90.png')]
         self.obstacleDimensions = (139, 72)
         self.soundComing = None
     

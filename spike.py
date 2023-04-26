@@ -6,6 +6,7 @@ class Spike(dynamicObstacle.DynamicObstacle):
     def __init__(self, game, soldier):
         super().__init__(game, soldier)
         self.singleImage = pygame.image.load('images/spikes.png')
+        self.imageList = [pygame.image.load('images/spikes.png')]
         self.obstacleDimensions = (60, 60)
     
     def update(self):
