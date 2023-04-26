@@ -24,12 +24,7 @@ class Prop:
         music = pygame.mixer.music.load('songs/galinha.ogg')
         pygame.mixer.music.play(-1)
         pygame.display.set_caption('De volta para o lar')
-    
-    def platformsDisplay(self):
-        pass
-        # BLACK = (0, 0, 0)
-        # for p in self.__platforms:
-        #     pygame.draw.rect(self.__screen, BLACK, p)
+
     
     def soldierDisplay(self, soldierImage, soldierPosition):
         self.__screen.blit(soldierImage, soldierPosition)

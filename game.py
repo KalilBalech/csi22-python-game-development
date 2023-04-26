@@ -11,7 +11,7 @@ import spikeBarHorizontal
 # init
 pygame.init()
 
-# game general properties 
+# game general properties  
 basics = prop.Prop() 
 basics.initialConfig()
 
@@ -55,9 +55,6 @@ while running:
         #background
         basics.fillBackground()
 
-        # platform display
-        basics.platformsDisplay()
-        
         # coins
         # make coin chains appear AND UPDATE STEP WALKED
         jetpackCoins.createCoinChain() 

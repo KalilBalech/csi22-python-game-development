@@ -2,8 +2,10 @@ import pygame
 import random
 import math
 import obstacle
+from abc import ABC
 
-class StaticObstacle(obstacle.Obstacle):
+# CLASSE GERAL DE OBSTACULOS ESTÁTICO COM OS METODOS E ATRIBUTOS PADRÕES IDENTICOS AO DA CLASSE OBSTACULO
+class StaticObstacle(obstacle.Obstacle, ABC):
     def __init__(self, game, soldier):
         super().__init__(game, soldier)
     
@@ -15,4 +17,3 @@ class StaticObstacle(obstacle.Obstacle):
     
     def createObstacle(self, securityMargin):
         super().createObstacle(securityMargin)
-            # another diference is the absence of sound

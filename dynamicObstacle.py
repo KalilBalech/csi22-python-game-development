@@ -1,8 +1,11 @@
 import pygame
 import random
 import obstacle
+from abc import ABC
 
-class DynamicObstacle(obstacle.Obstacle):
+# CLASSE GERAL DE OBSTACULOS DINÂMICO COM METODOS E ATRIBUTOS ADICIONAIS PARA QUE O OBJETO, ALEM DE ROTACIONAR, SE MOVA NA MESMA VELOCIDADE
+# DAS MOEDASS
+class DynamicObstacle(obstacle.Obstacle, ABC):
 
     def __init__(self, game, soldier):
         super().__init__(game, soldier)
@@ -14,9 +17,6 @@ class DynamicObstacle(obstacle.Obstacle):
         self.animationTimer = 0
         self.animationSpeed = 8
 
-        # particular
-        #self.singleImage = pygame.image.load('images/spike-ball.png')
-        #self.obstacleDimensions = (32, 32)
     def update(self):
         self.animationTimer += 1
         if self.animationTimer >= self.animationSpeed:

@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 
+# CLASSE RESPONSÁVEL PELAS MOEDAS NO JOGO
 class Coin():
     def __init__(self, game, soldier):
         self.__imageList =   [pygame.image.load('images/coin_0.png'),
@@ -22,7 +23,8 @@ class Coin():
         self.__coinSteps = [0]
         self.__game = game
         self.__soldier = soldier
-    
+
+# MÉTODO RESPONSÁVEL POR ATUALIZAR A ROTAÇÃO DAS MOEDAS DE MODO A GARANTIR UM EFEITO 3D DE ROTAÇÃO
     def update(self):
         self.__animationTimer += 1
         if self.__animationTimer >= self.__animationSpeed:
@@ -30,6 +32,7 @@ class Coin():
             self.__imageIndex += 1
             if self.__imageIndex > len(self.__imageList) - 1:
                 self.__imageIndex = 0
+# DESENHA AS MOEDAS NA TELA COM A POSIÇÃO ATUALIZADA
     def draw(self):
         image = self.__imageList[self.__imageIndex]
         for c in self.__coins:
@@ -38,7 +41,7 @@ class Coin():
             else:
                 c[0] -= self.__coinSpeed
                 self.__game.screen().blit(image, (c[0], c[1]))
-
+# VERIFICA SE O CAPITÃO JOÃO COLETOU A ALGUMA MOEDA DURANTE SEU TRAJETO E CONTABILIZA A MOEDA PEGA
     def verifyCollection(self):
         playerRect = pygame.Rect(self.__soldier.xPosition(), self.__soldier.yPosition(), self.__soldier.xDimensions(), self.__soldier.yDimensions())
         for c in self.__coins: 
@@ -46,10 +49,12 @@ class Coin():
                 self.__coins.remove(c)
                 self.__coinsCollected[0] += 1
                 self.__sound.play()
-    
+
+# GARANTE A PRIVACIDADE DO ATRIBUTO DE MOEDAS COLETADAS
     def coinsCollected(self):
         return self.__coinsCollected[0]
-
+    
+# CRIA ALEATORIAMENTE MOEDAS NA TELA
     def createCoinChain(self):
         minCoinAmount = 20
         maxCoinAmount = 40
@@ -322,100 +327,146 @@ class Coin():
                 for i in range (1, 6):
                     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(25 + i), coin_height + verticalCoinDistance*(6), 32, 32))
                 
-                #write M
+                #write L
                 # first vertical rod
                 for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(36 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # descida
-                for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(36+i/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # subida
-                for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42-i/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # second vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(41+1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-
-                #write E
-                # first vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # top horizontal rod
-                for i in range (1,5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(1), 32, 32))
-                # middle horizontal rod
-                for i in range (1,5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(5), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(35 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
                 # bottom horizontal rod
                 for i in range (1, 5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(9), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(35 + 1/2 + i), coin_height + verticalCoinDistance*(9), 32, 32))
                 
-                #write U
+                #write I
                 # first vertical rod
                 for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(47 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # bottom horizontal rod
-                for i in range (1, 5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(47  + 1/2+ i), coin_height + verticalCoinDistance*(9), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(41 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                
+                # write N
+                # first vertical rod
+                for i in range (1, 10):
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42+1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # descida
+                for i in range (1, 9):
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + 3*i/4), coin_height + verticalCoinDistance*(i+1), 32, 32))
                 # second vertical rod
                 for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(52 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(48), coin_height + verticalCoinDistance*(i), 32, 32))
+                
+                # write D
+                # first vertical rod
+                for i in range (1, 10):
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(49), coin_height + verticalCoinDistance*(i), 32, 32))
+                # cima
+                for i in range (0, 5):
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(53 - 3*i/4), coin_height + verticalCoinDistance*(5+i), 32, 32))
+                # baixo
+                for i in range (1, 5):
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(53 - 3*i/4), coin_height + verticalCoinDistance*(5-i), 32, 32))
                 
                 # write A
                 # subida
                 for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(57 +i/2), coin_height + verticalCoinDistance*(10-i), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(52 +i/2), coin_height + verticalCoinDistance*(10-i), 32, 32))
                 # descida
                 for i in range (1, 9):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(61 +(i+1)/2), coin_height + verticalCoinDistance*(i+1), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(56 +(i+1)/2), coin_height + verticalCoinDistance*(i+1), 32, 32))
                 # pauzinho horizontal
                 for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(59 + i), coin_height + verticalCoinDistance*(6), 32, 32))
+                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(54 + i), coin_height + verticalCoinDistance*(6), 32, 32))
                 
-                #write M
-                # first vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(66 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # descida
-                for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(66+i/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # subida
-                for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72-i/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # second vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(71+1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # #write M
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(36 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # descida
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(36+i/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # subida
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42-i/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # second vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(41+1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+
+                # #write E
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # top horizontal rod
+                # for i in range (1,5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(1), 32, 32))
+                # # middle horizontal rod
+                # for i in range (1,5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(5), 32, 32))
+                # # bottom horizontal rod
+                # for i in range (1, 5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(42 + i), coin_height + verticalCoinDistance*(9), 32, 32))
                 
-                #write O
-                # first vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # top horizontal rod
-                for i in range (1,5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2 + i), coin_height + verticalCoinDistance*(1), 32, 32))
-                # bottom horizontal rod
-                for i in range (1, 5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2 + i), coin_height + verticalCoinDistance*(9), 32, 32))
-                # second vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(77 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # #write U
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(47 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # bottom horizontal rod
+                # for i in range (1, 5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(47  + 1/2+ i), coin_height + verticalCoinDistance*(9), 32, 32))
+                # # second vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(52 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
                 
-                #write R
-                # first vertical rod
-                for i in range (1, 10):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(78 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # top horizontal rod
-                for i in range (1,5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(77 + 1/2 + i), coin_height + verticalCoinDistance*(1), 32, 32))
-                # middle horizontal rod
-                for i in range (1,4):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(78 + 1/2 + i), coin_height + verticalCoinDistance*(5), 32, 32))
-                # second vertical rod
-                for i in range (1, 6):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(82 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
-                # baixo descida
-                for i in range (1, 5):
-                    self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(83 + 1/4 - 3*i/4), coin_height + verticalCoinDistance*(10-i), 32, 32))
+                # # write A
+                # # subida
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(57 +i/2), coin_height + verticalCoinDistance*(10-i), 32, 32))
+                # # descida
+                # for i in range (1, 9):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(61 +(i+1)/2), coin_height + verticalCoinDistance*(i+1), 32, 32))
+                # # pauzinho horizontal
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(59 + i), coin_height + verticalCoinDistance*(6), 32, 32))
+                
+                # #write M
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(66 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # descida
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(66+i/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # subida
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72-i/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # second vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(71+1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                
+                # #write O
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # top horizontal rod
+                # for i in range (1,5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2 + i), coin_height + verticalCoinDistance*(1), 32, 32))
+                # # bottom horizontal rod
+                # for i in range (1, 5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(72 + 1/2 + i), coin_height + verticalCoinDistance*(9), 32, 32))
+                # # second vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(77 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                
+                # #write R
+                # # first vertical rod
+                # for i in range (1, 10):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(78 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # top horizontal rod
+                # for i in range (1,5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(77 + 1/2 + i), coin_height + verticalCoinDistance*(1), 32, 32))
+                # # middle horizontal rod
+                # for i in range (1,4):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(78 + 1/2 + i), coin_height + verticalCoinDistance*(5), 32, 32))
+                # # second vertical rod
+                # for i in range (1, 6):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(82 + 1/2), coin_height + verticalCoinDistance*(i), 32, 32))
+                # # baixo descida
+                # for i in range (1, 5):
+                #     self.__coins.append(pygame.Rect(self.__game.screen_width + horizontalCoinDistance*(83 + 1/4 - 3*i/4), coin_height + verticalCoinDistance*(10-i), 32, 32))
 
 # coin_structure = {1: 'Row', 
 #                   2:'Ascending ramp', 
