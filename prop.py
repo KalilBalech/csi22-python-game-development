@@ -20,21 +20,25 @@ class Prop:
         self.__scroll = [0]
         self.__backgroundSpeed = 5
     
+    # configurações iniciais do python
     def initialConfig(self):
         music = pygame.mixer.music.load('songs/galinha.ogg')
         pygame.mixer.music.play(-1)
         pygame.display.set_caption('De volta para o lar')
 
-    
+    # imprime o capitão joão na tela
     def soldierDisplay(self, soldierImage, soldierPosition):
         self.__screen.blit(soldierImage, soldierPosition)
     
+    # calcula distância percorrida
     def updateDistance(self):
         self.__runDistance[0] += 0.2
     
+    # muda o estado do jogador após perder
     def changeState(self, newState):
         self.state = newState
 
+    # desenha o fundo da floresta Amazônica e faz ele se mover para esquerda
     def fillBackground(self):
         for i in range (0, self.__tiles):
             self.__screen.blit(self.__background, (i*self.__background.get_width() + self.__scroll[0], 0))
@@ -46,6 +50,7 @@ class Prop:
         # LIGHT_BLUE = (15, 235, 255)
         # self.__screen.fill(LIGHT_BLUE)
     
+    # Escreve a interface de contagem de moedas e distância percorrida durante o jogo
     def userInterfaceDisplay(self, coinsCollected):
         LIGHT_BLUE = (15, 235, 255)
         BLACK = (0, 0, 0)
@@ -66,6 +71,7 @@ class Prop:
         run_text_rectangle.topleft = (60, 75)
         self.__screen.blit(run_text, run_text_rectangle)
     
+    # escreve a interface final após perder o jogo
     def loseInterface(self, coinAmout, distance):
         BLACK = (0, 0, 0)
         WHITE = (255, 255, 255)
@@ -106,6 +112,7 @@ class Prop:
         # Atualize a tela
         pygame.display.update()
     
+    # métodos que garantem a privacidade de alguns atributos
     def finalConfig(self):
         self.__clock.tick(60)
         pygame.display.flip()

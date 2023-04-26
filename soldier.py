@@ -13,6 +13,7 @@ class Soldier():
         self.__game = game
         super().__init__()
     
+    # realiza a dinâmica de movimento do soldado
     def movement(self):
         # player input
         current_player_rect = pygame.Rect(self.__position[0], self.__position[1], self.__dimensions[0], self.__dimensions[1])
@@ -42,6 +43,7 @@ class Soldier():
         
         # self.__screen.blit(self.__image, (position[0], position[1]))
 
+    # métodos que garantem a privacidade de alguns atributos
     def xPosition(self):
         return self.__position[0]
     

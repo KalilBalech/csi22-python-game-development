@@ -63,7 +63,7 @@ while running:
         # make the coins move and make the coins appear in the screen
         jetpackCoins.draw() 
  
-        # obstacles  
+        # obstacles criation and drawing
         rockets.createObstacle()
         rockets.draw()
         
